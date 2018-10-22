@@ -10,7 +10,8 @@ class GameInterface extends Component {
     speedX: 1,
     ballColor: "#FF0000",
     paddle1Color: "#808080",
-    paddle2Color: "#808080"
+    paddle2Color: "#808080",
+    twoPlayer: false
   };
 
   startGame = () => {
@@ -19,7 +20,7 @@ class GameInterface extends Component {
     });
   };
 
-  setStartGame = (maxScore, speed, ballColor, paddle1Color, paddle2Color) => {
+  setStartGame = (maxScore, speed, ballColor, paddle1Color, paddle2Color, twoPlayer) => {
     if ((maxScore, speed, ballColor, paddle1Color, paddle2Color)) {
       this.setState(
         {
@@ -27,7 +28,8 @@ class GameInterface extends Component {
           speedX: speed,
           ballColor: ballColor,
           paddle1Color: paddle1Color,
-          paddle2Color: paddle2Color
+          paddle2Color: paddle2Color,
+          twoPlayer: twoPlayer
         },
         () => {
           this.startGame();
@@ -65,6 +67,7 @@ class GameInterface extends Component {
                 ballColor={this.state.ballColor}
                 paddle1Color={this.state.paddle1Color}
                 paddle2Color={this.state.paddle2Color}
+                twoPlayer={this.state.twoPlayer}
               />
             </div>
           )}

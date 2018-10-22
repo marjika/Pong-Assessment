@@ -8,7 +8,8 @@ class GameControls extends Component {
       velocity: "",
       paddle1Color: "",
       paddle2Color: "",
-      ballColor: ""
+      ballColor: "",
+      twoPlayer: false,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -29,7 +30,8 @@ class GameControls extends Component {
       this.state.velocity,
       this.state.ballColor,
       this.state.paddle1Color,
-      this.state.paddle2Color
+      this.state.paddle2Color,
+      this.state.twoPlayer
     );
   };
 
@@ -103,6 +105,17 @@ class GameControls extends Component {
                   <option value="#FFF">WHITE</option>
                   <option value="#FF8C00">ORANGE</option>
                   <option value="#800080">PURPLE</option>
+                </select>
+              </label>
+              <label style={{ fontSize: "16px", color: "white" }}>
+                One or Two Players:
+                <select
+                  value={this.state.twoPlayer}
+                  name="twoPlayer"
+                  onChange={this.handleInputChange}
+                >
+                  <option value="true">TWO PLAYER</option>
+                  <option value="false">ONE PLAYER</option>
                 </select>
               </label>
               <label style={{ fontSize: "16px", color: "white" }}>

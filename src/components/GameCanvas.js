@@ -7,6 +7,7 @@ class GameCanvas extends Component {
     ballColor: "#FF0000",
     ballHeight: 15,
     ballWidth: 15,
+    twoPlayer: false,
     interval: 2000,
     timer: null,
     error: null,
@@ -20,7 +21,7 @@ class GameCanvas extends Component {
 
   componentDidMount = () => {
     this.setState(
-      { speedX: Number(this.props.speedX), ballColor: this.props.ballColor },
+      { speedX: Number(this.props.speedX), ballColor: this.props.ballColor, twoPlayer: this.props.twoPlayer },
       () => {
         this._initializeGameCanvas();
         console.log("canvas speed " + this.state.speedX);
@@ -190,7 +191,12 @@ class GameCanvas extends Component {
   _renderLoop = () => {
     this._ballCollisionY();
     this._userInput(this.player1);
-    this._userInput(this.player2);
+    if (!this.state.twoPlayer) {
+      this._aiMovement(this.player2);
+    }
+    else {
+      this._userInput(this.player2);
+    }
     this.frameId = window.requestAnimationFrame(this._renderLoop);
   };
 
@@ -233,7 +239,9 @@ class GameCanvas extends Component {
       this.p2Score += 1;
       this.deadBalls.push(this.gameBall);
       if (this.p2Score >= this.props.winningScore) {
-        this.resetGame();
+        this.p1Score = 0;
+        this.p2Score=0;
+        this.deadBalls=[];
       } else {
         this.gameBall = new this.GameClasses.Box({
           x: this.canvas.width / 2,
@@ -252,7 +260,9 @@ class GameCanvas extends Component {
       this.p1Score += 1;
       this.deadBalls.push(this.gameBall);
       if (this.p1Score >= this.props.winningScore) {
-        this.resetGame();
+        this.p1Score = 0;
+        this.p2Score=0;
+        this.deadBalls=[];
       } else {
         this.gameBall = new this.GameClasses.Box({
           x: this.canvas.width / 2,
@@ -288,11 +298,6 @@ class GameCanvas extends Component {
     this.ctx.fillRect(box.x, box.y, box.width, box.height);
   };
 
-  resetGame = () => {
-    this.setState({ deadBalls: [] });
-    this._initializeGameCanvas();
-  };
-
   // render player 1 score
   _displayScore1 = () => {
     this.ctx.font = "20px Arial";
@@ -310,6 +315,16 @@ class GameCanvas extends Component {
     this.ctx.fillStyle = "rgb(255, 255, 255)";
     this.ctx.fillText(this.p2Score, this.canvas.width / 2 + 33, 30);
   };
+
+  _aiMovement = () => {
+    if (this.gameBall.x>400 && this.gameBall.velocityX>0) {
+      if(this.gameBall.y > this.player2.y+this.player2.width/3 && (this.player2.y + this.player2.height + this.player2.velocityY) < this.canvas.height){
+        this.player2.y += this.player2.velocityY;
+      }else if(this.gameBall.y < this.player2.y+this.player2.width/3 && (this.player2.y - this.player2.velocityY > 0)){
+        this.player2.y -= this.player2.velocityY;
+      }
+    }
+  }
 
   //track user input
   _userInput = () => {
